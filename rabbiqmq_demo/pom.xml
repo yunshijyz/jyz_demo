@@ -10,7 +10,7 @@
     </parent>
 
     <groupId>com.example</groupId>
-    <artifactId>jyz_demo</artifactId>
+    <artifactId>rabbiqmq_demo</artifactId>
     <version>0.0.1-SNAPSHOT</version>
 
     <packaging>pom</packaging>
@@ -27,7 +27,11 @@
     </dependencies>
 
 
-   
+    <modules>
+        <module>rabbitmq_product8500</module>
+        <module>rabbitmq_common</module>
+        <module>rabbitmq_consumner8400</module>
+    </modules>
 
 
     <build>

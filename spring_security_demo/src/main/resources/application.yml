@@ -1,0 +1,32 @@
+
+server:
+  port: 8081
+
+#
+#spring:
+#  mvc:
+#    servlet:
+#      path: /api
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/hello_security?servertimezone=GMT%2B8&useUnicode=true&characterEncoding=UTF8&zeroDateTimeBehavior=round&allowMultiQueries=true
+    password: jiang101
+    username: root
+
+
+
+mybatis:
+  type-aliases-package: com.example.security.entity
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+
+
+token:
+  # 令牌自定义标识
+  header: Authorization
+  # 令牌密钥
+  secret: abcdefghijklmnopqrstuvwxyz
+  # 令牌有效期（默认30分钟）
+  expireTime: 30
+
