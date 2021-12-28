@@ -1,6 +1,7 @@
 package com.example.security.vo;
 
 import com.example.security.entity.SysUser;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -54,14 +55,6 @@ public class LoginUser implements UserDetails {
 
 
 
-
-
-
-
-
-
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return null;
@@ -77,23 +70,46 @@ public class LoginUser implements UserDetails {
         return user.getUserName();
     }
 
+    /**
+     * 账户是否未过期,过期无法验证
+     */
+    @JsonIgnore
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
+
+    /**
+     * 指定用户是否解锁,锁定的用户无法进行身份验证
+     *
+     * @return
+     */
+    @JsonIgnore
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
+    /**
+     * 指示是否已过期的用户的凭据(密码),过期的凭据防止认证
+     *
+     * @return
+     */
+    @JsonIgnore
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
+    /**
+     * 是否可用 ,禁用的用户不能身份验证
+     *
+     * @return
+     */
+    @JsonIgnore
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }
