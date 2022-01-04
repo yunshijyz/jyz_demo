@@ -31,7 +31,7 @@ public class MyQueue {
         rear = (rear+1) % array.length;
     }
 
-    HashMap
+
     /**
      *  出队
      */
