@@ -11,4 +11,6 @@ public class Demo {
 
     private BigDecimal newAmount;
 
+    private String[] strs;
+
 }
