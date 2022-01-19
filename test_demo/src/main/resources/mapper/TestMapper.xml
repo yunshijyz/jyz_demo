@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.TestMapper">
+
+
+
+    <select id="getList" resultType="com.example.demo.entity.Region">
+        select code,name from region where level = 1
+    </select>
+
+    <insert id="insertList" parameterType="java.util.List">
+        insert into province_bandwidth
+        (province,isp_code,flow,domain,start_time,end_time,bandwidth)
+        values
+        <foreach collection="list" item="provinceBandFlow" separator=",">
+            (#{provinceBandFlow.province},#{provinceBandFlow.ispCode},#{provinceBandFlow.flow},#{provinceBandFlow.domain},#{provinceBandFlow.startTime},#{provinceBandFlow.endTime},
+            #{provinceBandFlow.bandwidth})
+        </foreach>
+    </insert>
+
+
+    <select id="selectProvince" parameterType="com.example.demo.entity.UsageDistributionVo" resultType="com.example.demo.entity.ProvinceRes">
+        SELECT p.province , SUM(p.flow) flow,SUM(p.bandwidth) bandwidth,r.name pName
+        FROM `province_bandwidth` p
+        left join region r on r.id = p.province
+        <where>
+            <if test="domains != null and domains.size()!=0">
+                p.domain in(
+                <foreach collection="domains" item="provinceBandFlow" separator=",">
+                    (#{provinceBandFlow})
+                </foreach>
+                )
+            </if>
+            <if test="startTime != null and startTime != ''"><!-- 创建开始时间检索 -->
+                AND date_format(p.start_time,'%y%m%d') &gt;= date_format(#{startTime},'%y%m%d')
+            </if>
+            <if test="endTime != null and endTime != ''"><!-- 创建结束时间检索 -->
+                AND date_format(p.start_time,'%y%m%d') &lt;= date_format(#{endTime},'%y%m%d')
+            </if>
+        </where>
+        GROUP BY p.province
+    </select>
+
+</mapper>
