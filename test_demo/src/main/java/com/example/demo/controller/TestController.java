@@ -35,6 +35,10 @@ public class TestController {
         BigDecimal amount = demo.getAmount().subtract(demo.getNewAmount());
         NewDemo newDemo = new NewDemo();
         newDemo.setAmount(amount);
+        String[] strs = demo.getStrs();
+        for (String str : strs) {
+            System.out.println(str);
+        }
         return newDemo;
 
     }
