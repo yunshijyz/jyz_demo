@@ -1,25 +1,35 @@
 package com.cn.java;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
+import java.util.List;
 
 public class Test6 {
 
 
-    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
-
     public static void main(String[] args) {
 
-        long l = System.currentTimeMillis();
+         List<String> domains = Arrays.asList(
+                "testcdn1.supertcn.com",
+                "testcdn4.supertcn.com",
+                "testcdn5.supertcn.com",
+                "testcdn6.supertcn.com",
+                "testcdn3.supertcn.com",
+                "testcdn.supertcn.com",
+                "testcdn12.supertcn.com",
+                "testcdn13.supertcn.com",
+                "testcdn14.supertcn.com");
 
+        StringBuilder domainStr = new StringBuilder();
 
-        Long timeStamp = 1641533700L;
+        for(int i =0;i<domains.size();i++){
+            if(i == domains.size()-1){
+                domainStr.append(domains.get(i));
+            }else {
+                domainStr.append(domains.get(i));
+                domainStr.append("|");
+            }
+        }
 
-
-       // LocalDateTime.ofEpochSecond()
-        String format = dateTimeFormatter.format(LocalDateTime.ofEpochSecond(l /1000, 0, ZoneOffset.ofHours(8)));
-        System.out.println(format);
+        System.out.println(domainStr);
     }
 }
