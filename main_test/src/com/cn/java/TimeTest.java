@@ -17,9 +17,13 @@ public class TimeTest {
 //        Float v = aFloat / (1048576);
 //
 //        System.out.println(v);
+//
+//        LocalDateTime localDateTime = LocalDateTime.now().minusHours(1);
+//        System.out.println(localDateTime);
 
-        LocalDateTime localDateTime = LocalDateTime.now().minusHours(1);
-        System.out.println(localDateTime);
-
+        Long aLong = TimeStampUtil.Yes00();
+        Long aLong1 = TimeStampUtil.Yes24();
+        System.out.println(aLong);
+        System.out.println(aLong1);
     }
 }

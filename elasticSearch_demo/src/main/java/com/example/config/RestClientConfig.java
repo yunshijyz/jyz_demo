@@ -1,6 +1,7 @@
 package com.example.config;
 
 import org.elasticsearch.client.RestHighLevelClient;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.elasticsearch.client.ClientConfiguration;
@@ -11,13 +12,16 @@ import org.springframework.data.elasticsearch.config.AbstractElasticsearchConfig
 @Configuration
 public class RestClientConfig extends AbstractElasticsearchConfiguration {
 
+    @Value("${spring.elasticsearch.uris}")
+    private String host;
+
     @Override
     @Bean
     public RestHighLevelClient elasticsearchClient() {
 
         ClientConfiguration clientConfiguration =
                 ClientConfiguration.builder()
-                        .connectedTo("192.168.0.143:9200")
+                        .connectedTo(host)
                         .build();
         return RestClients.create(clientConfiguration).rest();
     }
