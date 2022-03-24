@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.example.demo.entity.*;
 import com.example.demo.service.TestService;
+import com.sun.jdi.LongValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +18,8 @@ import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @RestController
 @Slf4j
@@ -84,6 +85,7 @@ public class TestController {
     @GetMapping("insert")
     public String testMybatis(){
 
+
         testService.insertList();
         return "ok";
     }
@@ -95,6 +97,103 @@ public class TestController {
         log.info("provinceRes:{}",provinceRes);
         return provinceRes;
     }
+
+    @GetMapping("/getTree")
+    public List<OverviewPermissions> getTree(){
+        List<OverviewPermissions> menu = testService.getMenu();
+        Map<Long, OverviewPermissions> nodeMap = new HashMap<>(menu.size());
+        List<OverviewPermissions> treeNode = new ArrayList<>();
+        for (OverviewPermissions sysMenu : menu) {
+            OverviewPermissions node = new OverviewPermissions();
+            BeanUtil.copyProperties(sysMenu,node);
+            nodeMap.put(node.getId(),node);
+        }
+        for (OverviewPermissions node : nodeMap.values()){
+            Integer parentId = node.getParentId();
+            OverviewPermissions parentNode = nodeMap.get(Long.valueOf(parentId));
+            if(parentNode != null){
+                parentNode.getChildren().add(node);
+            } else {
+                treeNode.add(node);
+            }
+        }
+
+        return treeNode;
+    }
+
+
+    @GetMapping ("/tree")
+    public List<Treeselect> tree(){
+
+        List<OverviewPermissions> pers = testService.selectTree();
+
+        List<OverviewPermissions> returnList = new ArrayList<>();
+        List<Long> tempList = new ArrayList<>();
+        for (OverviewPermissions overviewPermissions : pers) {
+            tempList.add(overviewPermissions.getId());
+        }
+        for (Iterator<OverviewPermissions> iterator = pers.iterator(); iterator.hasNext();) {
+            OverviewPermissions dept = (OverviewPermissions) iterator.next();
+            // 如果是顶级节点, 遍历该父节点的所有子节点
+            if (!tempList.contains(dept.getParentId().longValue())) {
+                recursionFn(pers, dept);
+                returnList.add(dept);
+            }
+        }
+        if (returnList.isEmpty()) {
+            returnList = pers;
+        }
+        List<Treeselect> collect = returnList.stream().map(Treeselect::new).collect(Collectors.toList());
+        return collect;
+
+    }
+
+
+    /**
+     * 递归列表
+     */
+    private void recursionFn(List<OverviewPermissions> list, OverviewPermissions t)
+    {
+        // 得到子节点列表
+        List<OverviewPermissions> childList = getChildList(list, t);
+        t.setChildren(childList);
+        for (OverviewPermissions tChild : childList)
+        {
+            if (hasChild(list, tChild))
+            {
+                recursionFn(list, tChild);
+            }
+        }
+    }
+
+    /**
+     * 判断是否有子节点
+     */
+    private boolean hasChild(List<OverviewPermissions> list, OverviewPermissions t)
+    {
+        return getChildList(list, t).size() > 0;
+    }
+
+
+    /**
+     * 得到子节点列表
+     */
+    private List<OverviewPermissions> getChildList(List<OverviewPermissions> list, OverviewPermissions t)
+    {
+        List<OverviewPermissions> tlist = new ArrayList<OverviewPermissions>();
+        Iterator<OverviewPermissions> it = list.iterator();
+        while (it.hasNext())
+        {
+            OverviewPermissions n = (OverviewPermissions) it.next();
+            if (n.getParentId() != null && n.getParentId().longValue() == t.getId().longValue())
+            {
+                tlist.add(n);
+            }
+        }
+        return tlist;
+    }
+
+
 
 
 

@@ -102,8 +102,10 @@ class ElasticSearchDemoApplicationTests {
                 .field("status", 0)
                 .endObject());
         UpdateResponse response = restHighLevelClient.update(updateRequest, RequestOptions.DEFAULT);
+        if (response.status().equals("OK")){
+
+        }
         System.out.println(response.status());
-        restHighLevelClient.close();
 
     }
 

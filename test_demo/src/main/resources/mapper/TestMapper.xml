@@ -41,4 +41,8 @@
         GROUP BY p.province
     </select>
 
+    <select id="selectTree" resultType="com.example.demo.entity.OverviewPermissions">
+        select * from overview_permissions
+    </select>
+
 </mapper>

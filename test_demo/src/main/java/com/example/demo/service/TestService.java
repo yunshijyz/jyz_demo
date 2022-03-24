@@ -1,5 +1,6 @@
 package com.example.demo.service;
 
+import com.example.demo.entity.OverviewPermissions;
 import com.example.demo.entity.ProvinceRes;
 import com.example.demo.entity.Region;
 import com.example.demo.entity.UsageDistributionVo;
@@ -12,4 +13,8 @@ public interface TestService {
     void insertList();
 
     List<ProvinceRes> selectProvince(UsageDistributionVo usageDistributionVo);
+
+    List<OverviewPermissions> selectTree();
+
+    List<OverviewPermissions> getMenu();
 }

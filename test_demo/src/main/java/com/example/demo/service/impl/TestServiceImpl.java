@@ -1,9 +1,6 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.ProvinceBandwidth;
-import com.example.demo.entity.ProvinceRes;
-import com.example.demo.entity.Region;
-import com.example.demo.entity.UsageDistributionVo;
+import com.example.demo.entity.*;
 import com.example.demo.mapper.TestMapper;
 import com.example.demo.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,5 +45,15 @@ public class TestServiceImpl implements TestService {
     @Override
     public List<ProvinceRes> selectProvince(UsageDistributionVo usageDistributionVo) {
         return testMapper.selectProvince(usageDistributionVo);
+    }
+
+    @Override
+    public List<OverviewPermissions> selectTree() {
+        return testMapper.selectTree();
+    }
+
+    @Override
+    public List<OverviewPermissions> getMenu() {
+        return testMapper.selectTree();
     }
 }

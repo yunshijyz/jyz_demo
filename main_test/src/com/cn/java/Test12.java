@@ -147,7 +147,7 @@ public class Test12 {
 
     public static void main(String[] args) {
         Long currentTime = System.currentTimeMillis();
-        System.out.println("Current Time : " + currentTime + " = " + timestampToStr(currentTime, "GMT+8"));
+        System.out.println("current_time : " + currentTime + " = " + timestampToStr(currentTime, "GMT+8"));
         Long dailyStart = getDailyStartTime(currentTime, "GMT+8:00");
         Long dailyEnd = getDailyEndTime(currentTime, "GMT+8:00");
         Long monthStart = getMonthStartTime(currentTime, "GMT+8:00");

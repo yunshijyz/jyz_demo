@@ -1,5 +1,9 @@
 package com.cn.java;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.Date;
 import java.util.Random;
 
 public class Test4 {
@@ -7,19 +11,10 @@ public class Test4 {
 
 
     public static void main(String[] args) {
-        String[] str = {
-                "静态加速",
-                "视频加速",
-                "所有加速"
-        };
-
-        Random random = new Random();
-        for(int i = 0;i<10;i++){
-
-            System.out.println(str[random.nextInt(3)]);
-            System.out.println(str[random.nextInt(3)]);
-            System.out.println(str[random.nextInt(3)]);
-        }
-
+        //System.out.println(LocalDateTime.now().minusDays(6).toInstant(ZoneOffset.of("+8")).toEpochMilli());
+        System.out.println(LocalDate.now().minusDays(6).atTime(00, 00, 00).toInstant(ZoneOffset.of("+8")).toEpochMilli());
+        System.out.println(LocalDateTime.now().toInstant(ZoneOffset.of("+8")).toEpochMilli());
+        long time = System.currentTimeMillis();
+        System.out.println(time);
     }
 }

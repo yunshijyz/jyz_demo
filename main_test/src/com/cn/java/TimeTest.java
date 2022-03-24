@@ -21,9 +21,6 @@ public class TimeTest {
 //        LocalDateTime localDateTime = LocalDateTime.now().minusHours(1);
 //        System.out.println(localDateTime);
 
-        Long aLong = TimeStampUtil.Yes00();
-        Long aLong1 = TimeStampUtil.Yes24();
-        System.out.println(aLong);
-        System.out.println(aLong1);
+        System.out.println(System.currentTimeMillis());
     }
 }
