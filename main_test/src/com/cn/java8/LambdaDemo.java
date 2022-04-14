@@ -25,5 +25,16 @@ public class LambdaDemo {
 
         //list.forEach(System.out::println);
 
+        int[] ints = list.stream().mapToInt(x -> x.length()).toArray();
+
+        System.out.println("ints:"+Arrays.toString(ints));
+
+
+
+
+
+
+        List<Integer> list1 = new ArrayList<>();
+
     }
 }

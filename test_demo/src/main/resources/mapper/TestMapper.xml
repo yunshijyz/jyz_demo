@@ -45,4 +45,60 @@
         select * from overview_permissions
     </select>
 
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.example.demo.entity.User" useGeneratedKeys="true">
+        insert into m_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="username != null">
+                username,
+            </if>
+            <if test="avatar != null">
+                avatar,
+            </if>
+            <if test="email != null">
+                email,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="created != null">
+                created,
+            </if>
+            <if test="lastLogin != null">
+                last_login,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="username != null">
+                #{username,jdbcType=VARCHAR},
+            </if>
+            <if test="avatar != null">
+                #{avatar,jdbcType=VARCHAR},
+            </if>
+            <if test="email != null">
+                #{email,jdbcType=INTEGER},
+            </if>
+            <if test="password != null">
+                #{password,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="created != null">
+                #{created,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastLogin != null">
+                #{lastLogin,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
 </mapper>
