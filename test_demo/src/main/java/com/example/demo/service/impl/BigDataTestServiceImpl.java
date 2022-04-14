@@ -97,4 +97,9 @@ public class BigDataTestServiceImpl implements BigDataTestService {
         return list;
 
     }
+
+    @Override
+    public List<WarnMes> selectWarn() {
+        return bigDataTestMapper.selectWarn();
+    }
 }

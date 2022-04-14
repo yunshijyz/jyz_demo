@@ -1,5 +1,6 @@
 package com.demo.mybatis_plus.mybatis_plus_demo;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.demo.mybatis_plus.mybatis_plus_demo.entity.User;
@@ -51,7 +52,7 @@ class MybatisPlusDemoApplicationTests {
         Page<User> page = new Page<>();
         page.setCurrent(2l);
         page.setSize(2);
-
+        LambdaQueryWrapper lambdaQueryWrapper = new LambdaQueryWrapper();
         //queryWrapper.select("name");
         Page<User> pageRecord = userService.page(page);
         //pageRecord.getRecords().forEach(System.out::println);

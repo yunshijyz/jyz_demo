@@ -52,4 +52,8 @@
         group by risk_type;
     </select>
 
+    <select id="selectWarn" resultType="com.example.demo.entity.WarnMes">
+        select * from warn_mes
+    </select>
+
 </mapper>

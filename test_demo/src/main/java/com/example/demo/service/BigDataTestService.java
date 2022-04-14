@@ -1,9 +1,6 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.AlarmTrendTypeCount;
-import com.example.demo.entity.AlarmtrendCount;
-import com.example.demo.entity.BigDataVo;
-import com.example.demo.entity.StatisticsVo;
+import com.example.demo.entity.*;
 
 import java.util.List;
 import java.util.Map;
@@ -14,4 +11,6 @@ public interface BigDataTestService {
     Map<String,Object> getAllCount();
 
     List<AlarmTrendTypeCount> alarmTrendCount(StatisticsVo statisticsVo);
+
+    List<WarnMes> selectWarn();
 }

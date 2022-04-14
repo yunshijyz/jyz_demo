@@ -28,3 +28,6 @@ mybatis:
 logging:
   level:
     com.example.demo.mapper: debug
+
+
+name: "zhangsan"

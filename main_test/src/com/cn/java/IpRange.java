@@ -1,5 +1,7 @@
 package com.cn.java;
 
+import org.openjsse.sun.net.util.IPAddressUtil;
+
 public class IpRange {
 
     public static long ip2Long(String strIp){
@@ -32,18 +34,54 @@ public class IpRange {
         return (getIp2long(startIp)<=getIp2long(ip)) && (getIp2long(ip)<=getIp2long(endIp));
     }
 
+    /**
+     * IP v4转 数字 long型的
+     * @param ipStr ipStr
+     */
+    public static long ipV4StrToLong(String ipStr) {
+
+        String[] arr = ipStr.split("\\.");
+
+        long result = 0;
+
+        for (int i = 0; i < arr.length; i++) {
+
+            long ip = Long.parseLong(arr[3 - i]);
+
+            result |= ip << (i * 8);
+        }
+
+        return result;
+    }
+
+    /**
+     * 比较ip段起始ip大小
+     * @param startIp
+     * @param endIp
+     * @return
+     */
+    public static Boolean checkStartEndIpSize(String startIp,String endIp){
+        long start = ipV4StrToLong(startIp);
+        long end = ipV4StrToLong(endIp);
+        return start >= end;
+    }
+
     public static void main(String[] args) {
 
         String ip = "192.168.0.0";
 
-        String startIp = "192.168.0.0";
+        String startIp = "193.168.0.1";
 
-        String endIp = "192.168.0.255";
+        String endIp = "194.168.1.0";
+        System.out.println(checkStartEndIpSize(startIp, endIp));
 
-        boolean b = ipInRange(ip, startIp, endIp);
-        System.out.println(ip2Long(ip));
-        System.out.println(getIp2long(ip));
-        System.out.println(b);
+//        boolean b = ipInRange(ip, startIp, endIp);
+//        System.out.println(ipV4StrToLong(ip));
+//        System.out.println(ip2Long(ip));
+//        System.out.println(getIp2long(ip));
+//        System.out.println(b);
+
+
     }
 
 

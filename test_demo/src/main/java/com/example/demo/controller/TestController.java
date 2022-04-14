@@ -3,6 +3,11 @@ package com.example.demo.controller;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.*;
+import cn.hutool.crypto.symmetric.DES;
+import com.alibaba.fastjson.JSONObject;
+import com.example.demo.com.User;
 import com.example.demo.entity.*;
 import com.example.demo.service.TestService;
 import com.sun.jdi.LongValue;
@@ -13,13 +18,26 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.crypto.*;
+import javax.crypto.spec.DESKeySpec;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
+import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static cn.hutool.crypto.KeyUtil.generateKey;
+import static org.apache.catalina.manager.Constants.CHARSET;
 
 @RestController
 @Slf4j
@@ -33,6 +51,7 @@ public class TestController {
 
     @PostMapping("/test/demo")
     public NewDemo test(@RequestBody Demo demo){
+
         BigDecimal amount = demo.getAmount().subtract(demo.getNewAmount());
         NewDemo newDemo = new NewDemo();
         newDemo.setAmount(amount);
@@ -42,6 +61,164 @@ public class TestController {
         }
         return newDemo;
 
+    }
+
+    @GetMapping("/very")
+    public String testVery() throws NoSuchPaddingException, NoSuchAlgorithmException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException {
+
+
+
+        String l = "1649935051723";
+        log.info("l:{}",l);
+
+//        User user = new User();
+//
+//        user.setName("李进");
+//        user.setId(23);
+        //user.setArr(Arrays.asList(64,57,89));
+
+
+        JSONObject json = new JSONObject();
+
+//        String s1 = JSONObject.toJSONString(user);
+
+        json.put("name","李进");
+        json.put("id",23);
+
+        String data = json.toJSONString();
+
+
+
+        //第一层
+        String pk1 = "1";
+
+        String s2 = data+l+pk1;
+
+
+        //第二层
+        String pk2 = "2";
+
+        String pass = s2;
+        log.info("pass:{}",pass);
+
+
+        Digester md5 = new Digester(DigestAlgorithm.MD5);
+
+        String s = md5.digestHex(s2,StandardCharsets.UTF_8);
+
+        log.info("first:{}",s);
+
+
+//        byte[] key = l.getBytes(StandardCharsets.UTF_8);
+//
+//        HMac mac = new HMac(HmacAlgorithm.HmacMD5,key);
+//
+//        String s = mac.digestHex(s1,StandardCharsets.UTF_8);
+
+        Digester md51 = new Digester(DigestAlgorithm.MD5);
+        String ss2 = s+pk2;
+
+        String finalMd5 = md51.digestHex(ss2,StandardCharsets.UTF_8);
+
+
+//        byte[] key2 = pk2.getBytes(StandardCharsets.UTF_8);
+//
+//        HMac mac2 = new HMac(HmacAlgorithm.HmacMD5,key2);
+//        String finalMd5 = mac2.digestHex(s,StandardCharsets.UTF_8);
+
+        log.info("finalMd5:{}",finalMd5);
+
+        String sec = "7a93681513590d61ed0b9b3ceeef998dedf967ea6f13b4bc";
+        String pk3 = "12345678zxcvbnma";
+
+
+        try {
+            String s1 = decrypt_info(sec, pk3);
+            System.out.println("解密结果："+s1);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+
+
+
+
+
+
+        return finalMd5;
+
+    }
+
+    /**
+     *
+     */
+    public String decrypt_info(String hexStr,String key) throws UnsupportedEncodingException, NoSuchPaddingException, NoSuchAlgorithmException, IllegalBlockSizeException, BadPaddingException, InvalidKeyException {
+        byte[] decode = cn.hutool.core.codec.Base64.decode(hexStr);
+        SecretKeySpec keySpec = new SecretKeySpec(key.getBytes("UTF-8"),"AES");
+        Cipher cipher = Cipher.getInstance("AES/ECB/PKCS5Padding");
+        cipher.init(Cipher.DECRYPT_MODE,keySpec);
+        return new String(cipher.doFinal(decode));
+
+    }
+
+
+
+
+    /**
+     * DES解密字符串
+     *
+     * @param password 解密密码，长度不能够小于8位
+     * @param data 待解密字符串
+     * @return 解密后内容
+     */
+    public String decrypt1(String password, String data) {
+        if (password== null || password.length() < 8) {
+            throw new RuntimeException("加密失败，key不能小于8位");
+        }
+        if (data == null)
+            return null;
+        try {
+            Key secretKey = generateKey(password);
+            Cipher cipher = Cipher.getInstance("DES/ECB/NoPadding");
+            IvParameterSpec iv = new IvParameterSpec("0".getBytes(CHARSET));
+            cipher.init(Cipher.DECRYPT_MODE, secretKey, iv);
+            return new String(cipher.doFinal(Base64.getDecoder().decode(data.getBytes(CHARSET))), CHARSET);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return data;
+        }
+    }
+
+
+
+    /**
+     * 进行解密操作
+     * 参数一：待解密的字符串，参数二：加密密钥
+     * 返回解密后的字符串
+     */
+    public String decrypt(String decryptionBase64Str, String password) {
+        try {
+            //byte[] decryptionbytes = Base64.getDecoder().decode(decryptionBase64Str);
+            byte[] decryptionbytes = decryptionBase64Str.getBytes();
+            // DES算法要求有一个可信任的随机数源
+            SecureRandom random = new SecureRandom();
+            // 创建一个DESKeySpec对象
+            DESKeySpec desKey = new DESKeySpec(password.getBytes());
+            // 创建一个密钥工厂
+            SecretKeyFactory keyFactory = SecretKeyFactory.getInstance("DES");
+            // 将DESKeySpec对象转换成SecretKey对象
+            SecretKey securekey = keyFactory.generateSecret(desKey);
+            // Cipher对象实际完成解密操作
+            Cipher cipher = Cipher.getInstance("DES");
+            // 用密钥初始化Cipher对象
+            cipher.init(Cipher.DECRYPT_MODE, securekey, random);
+            // 开始解密操作
+            return new String(cipher.doFinal(decryptionbytes), "UTF-8");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return null;
     }
 
 

@@ -41,6 +41,11 @@ public class BigDataTestController {
 
     }
 
+    @GetMapping("/warn")
+    public List<WarnMes> testWarn(){
+        return bigDataTestService.selectWarn();
+    }
+
 
     @PostMapping("/count")
     public List<AlarmTrendTypeCount> bigdataTestCount(@RequestBody StatisticsVo statisticsVo){
