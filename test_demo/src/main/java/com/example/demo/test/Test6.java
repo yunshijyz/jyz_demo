@@ -51,17 +51,22 @@ public class Test6 {
 
         //加密为16进制，解密为原字符串
 
+
+
         String encryptHex = des.encryptHex(sec);
         System.out.println(encryptHex);
-        String sss = "7a93681513590d61ed0b9b3ceeef998d4b65c785fd4475f22baae037b77532b22e232663b81db5bb8c46f34db983b3d5d551f7b1684a276fae3a9b91c891fa6b3736365743aa6361";
+
+
+        String sss = "5e4f50e72dd04b2cf84ff5820f915bc3a7d22184584a9eba9af9019f96ef9ef64a0a03beecde2ff47d5d6bbaa9ab0550950e317ca2ec6299e4020416e8e67901595efde3eab9b823404e8f557ee8c017deffede389e346575ded2c47c9f36068feb959b7d4642fcb";
+        System.out.println(sss);
         String decryptStr = des.decryptStr(sss);
-        DesTest desTest = JSONUtil.toBean(decryptStr, DesTest.class);
+
+        System.out.println("string:"+decryptStr);
+
+        String s = Base64.decodeStr(decryptStr);
+        System.out.println(s);
+        DesTest desTest = JSONUtil.toBean(s, DesTest.class);
         System.out.println(desTest);
-        //System.out.println(decryptStr);
-
-
-
-
     }
 
     /**
