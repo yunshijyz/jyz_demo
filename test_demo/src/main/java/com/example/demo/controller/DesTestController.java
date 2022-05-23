@@ -46,7 +46,7 @@ public class DesTestController {
     public DesAndMd5 testDesAndMd5(HttpServletRequest request, @RequestBody DesBody desBody) throws UnsupportedEncodingException {
         DesAndMd5 desAndMd5 = new DesAndMd5();
 
-        String pk3 = "12345678";
+        String pk3 = "9193716c-970f-47f3-82bc-61206c61e97a";
         byte[] bytes = pk3.getBytes("UTF-8");
         //构建
         DES des = SecureUtil.des(bytes);
@@ -59,7 +59,7 @@ public class DesTestController {
         String time = request.getHeader("time");
         String md5ss = request.getHeader("md5ss");
         //第一层
-        String pk1 = "1";
+        String pk1 = "2329a212-f4c2-4cb5-a40a-486b1991289f";
         //第一层key
         String key1 = s+time+pk1;
         desAndMd5.setKey1(key1);
@@ -68,7 +68,7 @@ public class DesTestController {
         desAndMd5.setMd5one(md1);
 
         //第二层
-        String pk2 = "2";
+        String pk2 = "f4fad561-3e4a-42bc-8c2a-c5ad16bc2ce1";
         Digester md51 = new Digester(DigestAlgorithm.MD5);
         String ss2 = md1+pk2;
         desAndMd5.setKey2(ss2);

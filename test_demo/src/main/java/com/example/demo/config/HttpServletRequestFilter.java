@@ -1,5 +1,6 @@
 package com.example.demo.config;
 
+import cn.hutool.core.util.StrUtil;
 import com.example.demo.utils.HttpContextUtils;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -30,17 +31,29 @@ public class HttpServletRequestFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        ServletRequest requestWrapper = null;
-        if(servletRequest instanceof HttpServletRequest) {
-            requestWrapper = new RequestWrapper((HttpServletRequest) servletRequest);
-        }
-        //获取请求中的流如何，将取出来的字符串，再次转换成流，然后把它放入到新request对象中
-        // 在chain.doFiler方法中传递新的request对象
-        if(null == requestWrapper) {
+
+
+        HttpServletRequest req = (HttpServletRequest) servletRequest;
+        String md5ss = req.getHeader("md5ss");
+        String time = req.getHeader("time");
+        if(StrUtil.isBlank(md5ss) && StrUtil.isBlank(time)){
             filterChain.doFilter(servletRequest, servletResponse);
-        } else {
-            filterChain.doFilter(requestWrapper, servletResponse);
+        }else {
+
+            ServletRequest requestWrapper = null;
+            if(servletRequest instanceof HttpServletRequest) {
+                requestWrapper = new RequestWrapper((HttpServletRequest) servletRequest);
+            }
+            //获取请求中的流如何，将取出来的字符串，再次转换成流，然后把它放入到新request对象中
+            // 在chain.doFiler方法中传递新的request对象
+            if(null == requestWrapper) {
+                filterChain.doFilter(servletRequest, servletResponse);
+            } else {
+                filterChain.doFilter(requestWrapper, servletResponse);
+            }
         }
+
+
     }
 
     @Override

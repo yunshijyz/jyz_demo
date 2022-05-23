@@ -1,7 +1,11 @@
 package com.example.demo.utils;
 
+import cn.hutool.json.JSONUtil;
+import com.example.demo.entity.ProvinceRes;
 import com.example.demo.entity.UserAnalysisVo;
 import com.example.demo.entity.enums.StatisticsTimeEnum;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 import java.text.ParseException;
@@ -17,6 +21,20 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class GetTimeUtil {
+
+    public static void main(String[] args) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        ProvinceRes provinceRes = new ProvinceRes();
+        provinceRes.setProvince(123);
+        provinceRes.setBandwidth(1333);
+        provinceRes.setPName("province");
+        provinceRes.setFlow(456);
+        String s = objectMapper.writeValueAsString(provinceRes);
+        String s1 = JSONUtil.toJsonStr(provinceRes);
+        System.out.println(s);
+        System.out.println(s1);
+
+    }
 
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 

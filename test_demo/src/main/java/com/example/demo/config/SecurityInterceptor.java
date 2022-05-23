@@ -41,6 +41,9 @@ public class SecurityInterceptor implements HandlerInterceptor {
             HandlerMethod handlerMethod = (HandlerMethod) handler;// 把handler强转为HandlerMethod
             // 从handlerMethod中获取本次请求的接口方法对象然后判断该方法上是否标有我们自定义的注解@Security
             InterfaceCheck annotation = handlerMethod.getMethod().getAnnotation(InterfaceCheck.class);
+            if(annotation == null){
+                return true;
+            }
             String md5ss = request.getHeader("md5ss");
             String time = request.getHeader("time");
             if(StrUtil.isBlank(md5ss) || StrUtil.isBlank(time)){
@@ -62,20 +65,18 @@ public class SecurityInterceptor implements HandlerInterceptor {
 
             System.out.println(desBody.getBody());
 
-            if (null != annotation) {
-                // 对用户进行鉴权
-                try {
-                    if (checkAnno(desBody.getBody(),md5ss,time)) {
-                        return true;
-                    }
-                } catch (Exception e) {
-                    retrunHttpResponse(response);
-                    return false;
-                }
 
+            // 对用户进行鉴权
+            try {
+                if (checkAnno(desBody.getBody(), md5ss, time)) {
+                    return true;
+                }
+            } catch (Exception e) {
                 retrunHttpResponse(response);
-                return false;
             }
+
+
+            return false;
         }
         return true;
 
@@ -83,7 +84,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
 
 
     private boolean checkAnno(String body,String md5,String time) throws UnsupportedEncodingException {
-        String pk3 = "12345678";
+        String pk3 = "9193716c-970f-47f3-82bc-61206c61e97a";
         byte[] bytes = pk3.getBytes("UTF-8");
         //构建
         DES des = SecureUtil.des(bytes);
@@ -94,7 +95,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
         System.out.println("解密base64: "+s);
 
         //第一层
-        String pk1 = "1";
+        String pk1 = "2329a212-f4c2-4cb5-a40a-486b1991289f";
         //第一层key
         String key1 = s+time+pk1;
         System.out.println("第一次key1:"+key1);
@@ -103,7 +104,7 @@ public class SecurityInterceptor implements HandlerInterceptor {
         System.out.println("md1:"+md1);
 
         //第二层
-        String pk2 = "2";
+        String pk2 = "f4fad561-3e4a-42bc-8c2a-c5ad16bc2ce1";
         Digester md51 = new Digester(DigestAlgorithm.MD5);
         String ss2 = md1+pk2;
 
